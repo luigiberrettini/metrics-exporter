@@ -6,5 +6,6 @@ class GoogleSheetsSaver:
     def __init__(self, settings):
         pass
 
-    def save(self):
-        pass
+    async def save(self, metrics):
+        for metric in metrics:
+            pass

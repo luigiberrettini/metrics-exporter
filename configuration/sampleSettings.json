@@ -1,10 +1,46 @@
 {
-    "base_url": "http://graphite.domain",
-    "metrics_load_info": {
-        "API response time": "",
-        "System uptime": ""
-    },
-    "logs": {
+    "metrics_redirections": [
+        {
+            "source": {
+                "type": "graphite",
+                "server_url": "https://graphite.domain",
+                "user": "usr",
+                "password_or_auth_token": "tkn",
+                "verify_ssl_certs": true,
+                "items_to_load": [
+                    {
+                        "name": "API response time",
+                        "target": "smartSummarize(metric, 'weeks', 'avg', 'weeks1')",
+                        "start_date": "1 week ago monday midnight",
+                        "end_date": "monday midnight"
+                    },
+                    {
+                        "name": "System uptime",
+                        "target": "smartSummarize(metric, 'weeks', 'avg', 'weeks1')",
+                        "start_date": "1 week ago monday midnight",
+                        "end_date": "monday midnight"
+                    }
+                ],
+            },
+            "destination": {
+                "type": "googleSheets",
+                "spreadsheet_id": "1qpyC0XzvTcKT6EISywvqESX3A0MwQoFDE8p",
+                "worksheet_name": "Sheet1",
+                "initial_row": {
+                    "lookup_mode": "header|contents",
+                    "lookup_type": "constant|metric_name|date",
+                    "lookup_value": "constant_value||monday midnight"
+                },
+                "initial_column": {
+                    "lookup_mode": "header|contents",
+                    "lookup_type": "constant|metric_name|date",
+                    "lookup_value": "constant_value||monday midnight"
+                },
+                "write_mode": "row-wise"
+            }
+        }
+    ],
+    "logging": {
         "version": 1,
         "disable_existing_loggers": false,
         "formatters": {
@@ -22,6 +58,10 @@
         },
         "loggers": {
             "asyncio": {
+                "level": "WARNING",
+                "handlers": [ "console" ]
+            },
+            "parsedatetime": {
                 "level": "WARNING",
                 "handlers": [ "console" ]
             }
