@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 
 import logging
-import tzlocal
-import parsedatetime
 import csv
 
-from datetime import datetime
+from utils import date_parse_lambda_factory
 
 class GraphiteMetric:
     def __init__(self, item_to_load, session):
         self.logger = logging.getLogger(__name__)
-        self.item_to_load = item_to_load
-        self.metric_name = self.item_to_load['name']
-        self.metric_target = self.item_to_load['target']
+        self.metric_name = item_to_load['name']
+        self.metric_target = item_to_load['target']
         self.metric_values = []
-        get_formatted_date = self._formatted_date_lambda()
-        self.start_date = get_formatted_date('start_date')
-        self.end_date = get_formatted_date('end_date')
+        parse_date = date_parse_lambda_factory()
+        str_to_formatted_date = lambda date_string: parse_date(date_string).strftime('%Y%m%d')
+        self.start_date = str_to_formatted_date(item_to_load['start_date'])
+        self.end_date = str_to_formatted_date(item_to_load['end_date'])
         self.session = session
 
     @property
@@ -33,13 +31,8 @@ class GraphiteMetric:
         try:
             metric_contents = await self.session.get_resource_at_once(metric_resource)
             self._values_from_csv_contents(metric_contents)
-        except Exception as err:
-            self.logger.error('Error loading metric {:s} from resource'.format(self.metric_name, metric_resource))
-
-    def _formatted_date_lambda(self):
-        calendar = parsedatetime.Calendar()
-        local_timezone = tzlocal.get_localzone()
-        return lambda x: calendar.parseDT(datetimeString = self.item_to_load[x], tzinfo = local_timezone)[0].strftime('%Y%m%d')
+        except Exception as exception:
+            self.logger.error('{}\r\n\tMetric: {:s}\r\n\tResource: {:s}'.format(exception, self.metric_name, metric_resource))
 
     def _values_from_csv_contents(self, contents):
         self.metric_values = []

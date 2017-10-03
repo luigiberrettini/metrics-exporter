@@ -26,7 +26,7 @@ class MetricsRedirector:
 
     async def export(self):
         metrics = [ metric async for metric in self.source.load() ]
-        await self.destination.save(metrics)
+        self.destination.save(metrics)
 
     def _create(self, dict, settings):
         return dict[settings['type']](settings)

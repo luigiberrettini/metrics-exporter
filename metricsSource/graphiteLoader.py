@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 
-import logging
-
 from metricsSource.urlBuilder import UrlBuilder
 from metricsSource.session import Session
 from metricsSource.graphiteMetric import GraphiteMetric
 
 class GraphiteLoader:
     def __init__(self, settings):
-        self.logger = logging.getLogger(__name__)
         self.items_to_load = settings['items_to_load']
         url_builder = UrlBuilder(settings['server_url'])
         headers = { 'Accept': 'text/csv'}
@@ -22,4 +19,5 @@ class GraphiteLoader:
             metrics = list(map(lambda item_to_load: GraphiteMetric(item_to_load, session), self.items_to_load))
             for metric in metrics:
                 await metric.load()
-                yield metric
+                if metric.values:
+                    yield metric

@@ -24,19 +24,36 @@
             },
             "destination": {
                 "type": "googleSheets",
+                "credentials" : {
+                    "email_for_impersonation": "user@example.org",
+                    "type": "service_account",
+                    "project_id": "metrics-exporter",
+                    "private_key_id": "1234567890abcdef1234567890abcdef12345678",
+                    "private_key": "-----BEGIN PRIVATE KEY-----\n1234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef123456781234567890abcdef1234567890abcdef==\n-----END PRIVATE KEY-----\n",
+                    "client_email": "mail@metrics-exporter.iam.gserviceaccount.com",
+                    "client_id": "123456789012345678901",
+                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                    "token_uri": "https://accounts.google.com/o/oauth2/token",
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mail%40metrics-exporter.iam.gserviceaccount.com"
+                },
                 "spreadsheet_id": "1qpyC0XzvTcKT6EISywvqESX3A0MwQoFDE8p",
-                "worksheet_name": "Sheet1",
-                "initial_row": {
-                    "lookup_mode": "header|contents",
-                    "lookup_type": "constant|metric_name|date",
-                    "lookup_value": "constant_value||monday midnight"
+                "worksheet_name": "MySheet",
+                "initial_row_lookup": {
+                    "mode": "header|contents",
+                    "type": "constant|metric|date",
+                    "value": "constant_value||monday midnight",
+                    "context": "A:A",
+                    "dimension": "COLUMNS"
                 },
-                "initial_column": {
-                    "lookup_mode": "header|contents",
-                    "lookup_type": "constant|metric_name|date",
-                    "lookup_value": "constant_value||monday midnight"
+                "initial_column_lookup": {
+                    "mode": "header|contents",
+                    "type": "constant|metric|date",
+                    "value": "constant_value||monday midnight",
+                    "context": "1:1",
+                    "dimension": "ROWS"
                 },
-                "write_mode": "row-wise"
+                "write_dimension": "ROWS"
             }
         }
     ],
@@ -62,6 +79,26 @@
                 "handlers": [ "console" ]
             },
             "parsedatetime": {
+                "level": "WARNING",
+                "handlers": [ "console" ]
+            },
+            "googleapiclient.discovery": {
+                "level": "WARNING",
+                "handlers": [ "console" ]
+            },
+            "googleapiclient.discovery_cache": {
+                "level": "ERROR",
+                "handlers": [ "console" ]
+            },
+            "oauth2client.client": {
+                "level": "WARNING",
+                "handlers": [ "console" ]
+            },
+            "oauth2client.crypt": {
+                "level": "WARNING",
+                "handlers": [ "console" ]
+            },
+            "oauth2client.transport": {
                 "level": "WARNING",
                 "handlers": [ "console" ]
             }
