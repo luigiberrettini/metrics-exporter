@@ -20,7 +20,7 @@ class GoogleSheetsSaver:
 
     def __init__(self, settings):
         self.logger = logging.getLogger(__name__)
-        self.credentials = settings['credentials']
+        self.auth = settings['auth']
         self.spreadsheet_id = settings['spreadsheet_id']
         self.worksheet_name = settings['worksheet_name']
         self.initial_row_lookup = settings['initial_row_lookup']
@@ -37,9 +37,9 @@ class GoogleSheetsSaver:
 
     def _init_gspred_client(self):
         try:
-            credentials = ServiceAccountCredentials.from_json_keyfile_dict(self.credentials, self.google_api_scope)
-            #delegated_credentials = credentials.create_delegated(self.credentials['email_for_impersonation'])
-            #self.gspread_client = discovery.build('sheets', 'v4', http = delegated_credentials.authorize(Http()))
+            credentials = ServiceAccountCredentials.from_json_keyfile_dict(self.auth, self.google_api_scope)
+            email_for_impersonation = self.auth.get('email_for_impersonation')
+            credentials = credentials.create_delegated(self.auth['email_for_impersonation']) if email_for_impersonation else credentials
             self.gspread_client = discovery.build('sheets', 'v4', http = credentials.authorize(Http()))
         except Exception as exception:
             self.logger.error('Google API authentication error: {}'.format(exception))

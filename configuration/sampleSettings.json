@@ -24,7 +24,7 @@
             },
             "destination": {
                 "type": "googleSheets",
-                "credentials" : {
+                "auth" : {
                     "email_for_impersonation": "user@example.org",
                     "type": "service_account",
                     "project_id": "metrics-exporter",
