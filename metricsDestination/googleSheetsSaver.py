@@ -81,7 +81,7 @@ class GoogleSheetsSaver:
 
     def _find_initial_row_or_col(self, lookup_context, lookup_dimension, lookup_value):
         values = self._get_values(lookup_context, lookup_dimension)
-        index = self._index_in_list(lookup_value, values)
+        index = self._find_index(lookup_value, values)
         return index
 
     def _get_values(self, a1_coordinates, major_dimension):
@@ -92,12 +92,13 @@ class GoogleSheetsSaver:
             majorDimension = major_dimension,
             valueRenderOption = 'UNFORMATTED_VALUE')
         response = get_operation.execute()
-        return response.get('values', [])[0]
+        return response.get('values', [])
 
-    def _index_in_list(self, lookup_value, items):
-        for index, item in enumerate(items):
-            if item == lookup_value:
-                return index + 1
+    def _find_index(self, lookup_value, range_items):
+        for row_or_col_items in range_items:
+            for index, row_or_col_item in enumerate(row_or_col_items):
+                if row_or_col_item == lookup_value:
+                    return index + 1
         raise LookupError("Value '{}' not found".format(lookup_value))
 
     def _save_single_metric(self, metric, find_row, find_col):
