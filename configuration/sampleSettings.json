@@ -10,13 +10,13 @@
                 "items_to_load": [
                     {
                         "name": "API response time",
-                        "target": "smartSummarize(metric, 'weeks', 'avg', 'weeks1')",
+                        "target": "smartSummarize(metric, '7d', 'avg', 'weeks1')",
                         "start_date": "1 week ago monday midnight",
                         "end_date": "monday midnight"
                     },
                     {
                         "name": "System uptime",
-                        "target": "smartSummarize(metric, 'weeks', 'avg', 'weeks1')",
+                        "target": "smartSummarize(metric, '7d', 'avg', 'weeks1')",
                         "start_date": "1 week ago monday midnight",
                         "end_date": "monday midnight"
                     }
