@@ -2,6 +2,8 @@
 
 import aiohttp
 
+from urllib.parse import quote
+
 class Session:
     def __init__(self, url_builder, headers, user = None, password = None, verify_ssl_certs = True):
         self.url_builder = url_builder
@@ -19,5 +21,7 @@ class Session:
 
     async def get_resource_at_once(self, resource):
         relative_url = self.url_builder.relative_url_from_resource(resource)
-        async with self.session.get(self.url_builder.absolute_url_from_relative(relative_url)) as response:
+        absolute_url = self.url_builder.absolute_url_from_relative(relative_url)
+        quoted_url = quote(absolute_url, safe = "%/:=&?~#+!$,;@()*[]")
+        async with self.session.get(quoted_url) as response:
             return await response.content.read()
