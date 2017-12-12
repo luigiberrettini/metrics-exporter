@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from utils import date_parse_lambda_factory
 from metricsSource.urlBuilder import UrlBuilder
 from metricsSource.session import Session
 from metricsSource.graphiteMetric import GraphiteMetric
@@ -15,8 +16,11 @@ class GraphiteLoader:
         self.session_factory = lambda: Session(url_builder, headers, user, password_or_auth_token, verify_ssl_certs)
 
     async def load(self):
+        parse_date = date_parse_lambda_factory()
+        to_graphite_date = lambda date_string: parse_date(date_string).strftime('%Y%m%d')
+
         async with self.session_factory() as session:
-            metrics = list(map(lambda item_to_load: GraphiteMetric(item_to_load, session), self.items_to_load))
+            metrics = list(map(lambda item_to_load: GraphiteMetric(item_to_load, to_graphite_date, session), self.items_to_load))
             for metric in metrics:
                 await metric.load()
                 if metric.values:

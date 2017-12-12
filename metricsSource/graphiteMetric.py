@@ -3,18 +3,14 @@
 import logging
 import csv
 
-from utils import date_parse_lambda_factory
-
 class GraphiteMetric:
-    def __init__(self, item_to_load, session):
+    def __init__(self, item_to_load, to_graphite_date, session):
         self.logger = logging.getLogger(__name__)
         self.metric_name = item_to_load['name']
         self.metric_target = item_to_load['target']
         self.metric_values = []
-        parse_date = date_parse_lambda_factory()
-        str_to_formatted_date = lambda date_string: parse_date(date_string).strftime('%Y%m%d')
-        self.start_date = str_to_formatted_date(item_to_load['start_date'])
-        self.end_date = str_to_formatted_date(item_to_load['end_date'])
+        self.start_date = to_graphite_date(item_to_load['start_date'])
+        self.end_date = to_graphite_date(item_to_load['end_date'])
         self.session = session
 
     @property
