@@ -35,4 +35,4 @@ class GraphiteMetric:
         for line in csv.reader(contents.decode('UTF-8').splitlines()):
             name, date, value = line
             if (value):
-                self.metric_values.append(int(value))
+                self.metric_values.append(float(value))
