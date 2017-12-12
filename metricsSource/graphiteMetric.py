@@ -7,7 +7,7 @@ class GraphiteMetric:
     def __init__(self, item_to_load, to_graphite_date, session):
         self.logger = logging.getLogger(__name__)
         self.metric_name = item_to_load['name']
-        self.metric_target = item_to_load['target']
+        self.metric_target = item_to_load['target'].replace("{","{{").replace("}","}}")
         self.metric_values = []
         self.start_date = to_graphite_date(item_to_load['start_date'])
         self.end_date = to_graphite_date(item_to_load['end_date'])
@@ -22,8 +22,8 @@ class GraphiteMetric:
         return self.metric_values
 
     async def load(self):
-        url_template = 'render?format=csv&from=00:00_{:s}&until=00:00_{:s}&target=alias({:s},{:s})'
-        metric_resource = url_template.format(self.start_date, self.end_date, self.name, self.metric_target)
+        url_template = "render?format=csv&from=00:00_{:s}&until=00:00_{:s}&target=alias({:s}, '{:s}')"
+        metric_resource = url_template.format(self.start_date, self.end_date, self.metric_target, self.name)
         try:
             metric_contents = await self.session.get_resource_at_once(metric_resource)
             self._values_from_csv_contents(metric_contents)
