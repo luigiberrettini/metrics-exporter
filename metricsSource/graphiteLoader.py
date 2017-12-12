@@ -18,7 +18,6 @@ class GraphiteLoader:
     async def load(self):
         parse_date = date_parse_lambda_factory()
         to_graphite_date = lambda date_string: parse_date(date_string).strftime('%Y%m%d')
-
         async with self.session_factory() as session:
             metrics = list(map(lambda item_to_load: GraphiteMetric(item_to_load, to_graphite_date, session), self.items_to_load))
             for metric in metrics:
