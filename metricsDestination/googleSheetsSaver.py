@@ -107,6 +107,7 @@ class GoogleSheetsSaver:
             col = find_col(metric.name)
             a1_coordinates = self._numbers_to_a1(row, col)
             self._write_values(a1_coordinates, metric.values)
+            self.logger.debug("Saved metric '{:s}' at coordinates '{:s}' with values '{}'".format(metric.name, a1_coordinates, metric.values))
         except Exception as exception:
             self.logger.error('{}\r\n\tMetric to save: {:s}'.format(exception, metric.name))
 
